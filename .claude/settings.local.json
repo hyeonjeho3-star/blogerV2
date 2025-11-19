@@ -9,7 +9,10 @@
       "Bash(./venv/Scripts/pip install:*)",
       "Bash(./venv/Scripts/pip list:*)",
       "Bash(python -m pytest:*)",
-      "Bash(python -c:*)"
+      "Bash(python -c:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

@@ -4,17 +4,50 @@ v1.0.3의 config/settings.py를 Pydantic Settings로 업그레이드
 """
 from pathlib import Path
 from typing import Optional
-from pydantic_settings import BaseSettings, SettingsConfigDict
+
+try:
+    from pydantic_settings import BaseSettings, SettingsConfigDict
+    HAS_PYDANTIC_SETTINGS = True
+except ImportError:
+    # Fallback for missing pydantic_settings
+    HAS_PYDANTIC_SETTINGS = False
+    class BaseSettings:
+        def __init__(self, **data):
+            for key, value in data.items():
+                setattr(self, key, value)
+
+    def SettingsConfigDict(**kwargs):
+        return kwargs
 
 
 class Settings(BaseSettings):
     """환경 변수 기반 설정"""
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        case_sensitive=False
-    )
+    if HAS_PYDANTIC_SETTINGS:
+        model_config = SettingsConfigDict(
+            env_file=".env",
+            env_file_encoding="utf-8",
+            case_sensitive=False
+        )
+
+    def __init__(self, **data):
+        """초기화"""
+        if HAS_PYDANTIC_SETTINGS:
+            super().__init__(**data)
+        else:
+            # Fallback 초기화
+            self.naver_datalab_client_id = data.get('naver_datalab_client_id', 'dummy_id')
+            self.naver_datalab_client_secret = data.get('naver_datalab_client_secret', 'dummy_secret')
+            self.naver_search_client_id = data.get('naver_search_client_id', None)
+            self.naver_search_client_secret = data.get('naver_search_client_secret', None)
+            self.google_gemini_api_key = data.get('google_gemini_api_key', 'dummy_key')
+            self.redis_host = data.get('redis_host', 'localhost')
+            self.redis_port = data.get('redis_port', 6379)
+            self.redis_db = data.get('redis_db', 0)
+            self.app_name = data.get('app_name', 'Blog Mate v2.0')
+            self.log_level = data.get('log_level', 'INFO')
+            self.cache_enabled = data.get('cache_enabled', False)
+            self.max_batch_size = data.get('max_batch_size', 5)
 
     # API Credentials
     naver_datalab_client_id: str = "dummy_id"
