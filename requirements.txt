@@ -1,0 +1,37 @@
+# Core Framework
+streamlit
+
+# Data Validation & Models
+pydantic
+pydantic-settings
+
+# HTTP & API
+httpx
+# aiohttp  # Phase 5에서 필요 시 설치 (빌드 필요)
+
+# Data Processing (이미 설치됨)
+pandas
+numpy
+
+# Environment & Config
+python-dotenv
+
+# Logging
+loguru
+
+# Caching (Optional for Phase 5)
+redis
+
+# AI/ML (기존 v1.0.3)
+google-generativeai
+
+# Testing
+pytest
+pytest-asyncio
+pytest-cov
+pytest-mock
+
+# Development
+black
+ruff
+mypy
